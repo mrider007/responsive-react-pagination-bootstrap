@@ -1,3 +1,3 @@
 import Pagination from "./component/ReactPagination";
 
-export {Pagination}
+export default Pagination
