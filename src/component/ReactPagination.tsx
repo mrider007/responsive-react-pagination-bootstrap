@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import  Pagination from "react-bootstrap/Pagination";
 
 interface EllipsisPaginationProps {
   totalPages: number;
@@ -10,13 +9,12 @@ interface EllipsisPaginationProps {
   lg?: number;
 }
 
-const EllipsisPagination: React.FC<EllipsisPaginationProps> = ({ totalPages, currentPage, onPageChange, md, lg }) => {
+const Pagination: React.FC<EllipsisPaginationProps> = ({ totalPages, currentPage, onPageChange, md, lg }) => {
   const [visiblePages, setVisiblePages] = useState<number>(lg || 10);
-  const ellipsis = <Pagination.Ellipsis disabled />;
 
   useEffect(() => {
     const updateVisiblePages = () => {
-      const newVisiblePages = window.innerWidth < 900 ? md || 5 : lg || 10;
+      const newVisiblePages = window.innerWidth < 900 ? (md || 5) : (lg || 10);
       setVisiblePages(newVisiblePages);
     };
     updateVisiblePages();
@@ -29,65 +27,51 @@ const EllipsisPagination: React.FC<EllipsisPaginationProps> = ({ totalPages, cur
   const generatePaginationItems = () => {
     const items: React.ReactNode[] = [];
 
+    const ellipsisStyle = {
+      padding: "0.5rem 0.75rem",
+      cursor: "default"
+    };
+
     if (totalPages <= visiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         items.push(
-          <Pagination.Item
-            key={i}
-            active={i === currentPage}
-            onClick={() => onPageChange(i)}
-          >
+          <li key={i} style={{ padding: "0.5rem 0.75rem", backgroundColor: i === currentPage ? 'blue' : 'gray', color: i === currentPage ? 'white' : 'black', cursor: 'pointer' }} onClick={() => onPageChange(i)}>
             {i}
-          </Pagination.Item>
+          </li>
         );
       }
     } else {
-      // If the total number of pages is greater than visible pages, show ellipsis
       const leftEllipsis = currentPage > Math.floor(visiblePages / 2) + 1;
       const rightEllipsis = currentPage < totalPages - Math.floor(visiblePages / 2);
 
       if (!leftEllipsis) {
-        // Show pages without left ellipsis
         for (let i = 1; i <= visiblePages; i++) {
           items.push(
-            <Pagination.Item
-              key={i}
-              active={i === currentPage}
-              onClick={() => onPageChange(i)}
-            >
+            <li key={i} style={{ padding: "0.5rem 0.75rem", backgroundColor: i === currentPage ? 'blue' : 'gray', color: i === currentPage ? 'white' : 'black', cursor: 'pointer' }} onClick={() => onPageChange(i)}>
               {i}
-            </Pagination.Item>
+            </li>
           );
         }
-        items.push(ellipsis);
+        items.push(<li key="ellipsis" style={ellipsisStyle}>...</li>);
       } else if (!rightEllipsis) {
-        // Show pages without right ellipsis
-        items.push(ellipsis);
+        items.push(<li key="ellipsis" style={ellipsisStyle}>...</li>);
         for (let i = totalPages - visiblePages + 1; i <= totalPages; i++) {
           items.push(
-            <Pagination.Item
-              key={i}
-              active={i === currentPage}
-              onClick={() => onPageChange(i)}
-            >
+            <li key={i} style={{ padding: "0.5rem 0.75rem", backgroundColor: i === currentPage ? 'blue' : 'gray', color: i === currentPage ? 'white' : 'black', cursor: 'pointer' }} onClick={() => onPageChange(i)}>
               {i}
-            </Pagination.Item>
+            </li>
           );
         }
       } else {
-        items.push(ellipsis);
+        items.push(<li key="ellipsis" style={ellipsisStyle}>...</li>);
         for (let i = currentPage - Math.floor(visiblePages / 2); i <= currentPage + Math.floor(visiblePages / 2); i++) {
           items.push(
-            <Pagination.Item
-              key={i}
-              active={i === currentPage}
-              onClick={() => onPageChange(i)}
-            >
+            <li key={i} style={{ padding: "0.5rem 0.75rem", backgroundColor: i === currentPage ? 'blue' : 'gray', color: i === currentPage ? 'white' : 'black', cursor: 'pointer' }} onClick={() => onPageChange(i)}>
               {i}
-            </Pagination.Item>
+            </li>
           );
         }
-        items.push(ellipsis);
+        items.push(<li key="ellipsis" style={ellipsisStyle}>...</li>);
       }
     }
 
@@ -95,10 +79,10 @@ const EllipsisPagination: React.FC<EllipsisPaginationProps> = ({ totalPages, cur
   };
 
   return (
-    <Pagination>
+    <ul style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
       {generatePaginationItems()}
-    </Pagination>
+    </ul>
   );
 };
 
-export default EllipsisPagination;
+export default Pagination;

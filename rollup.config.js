@@ -11,6 +11,6 @@ export default defineConfig({
         format:'es',
         name:"responsive-react-pagination-bootstrap",
     },
-    external:['react','react-dom','react-bootstrap'],
+    external:['react','react-dom'],
     plugins:[typescript({tsconfig:'tsconfig.json'})]
 })

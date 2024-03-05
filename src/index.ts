@@ -1,1 +1,3 @@
-export * from './component/ReactPagination'
+import Pagination from "./component/ReactPagination";
+
+export {Pagination}
